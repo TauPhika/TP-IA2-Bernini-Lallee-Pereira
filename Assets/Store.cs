@@ -56,6 +56,7 @@ public class Store : MonoBehaviour
         foreach (var item in allItems) _allItems.AddLast(item);
 
         var rows = OrganizeItems(_allItems);
+        items.Clear();
 
         foreach (var row in rows)
         {
@@ -65,7 +66,9 @@ public class Store : MonoBehaviour
             foreach (var item in row)
             {
                 var i = Instantiate(item, newRow.transform);
+                i.GetComponent<Image>().sprite = i.GetComponent<Item>().sprite;
                 i.RescaleItem(itemScale);
+                items.Add(i);
             }
         }
 
