@@ -7,14 +7,15 @@ using UnityEngine.UI;
 public class Store : MonoBehaviour
 {
     public static Store instance;
-    public List<GameObject> items;
-    public LinkedList<GameObject> _items = new();
+    public List<GameObject> initialItems;
+    public LinkedList<GameObject> activeItems = new();
+    public LinkedList<GameObject> remainingItems = new();
 
     public GameObject itemOrganizer;
     public GameObject rowPrefab;
-    [Range(2,10)]
+    [Range(1,10)]
     public int xSize = 5;
-    [Range(2,10)]
+    [Range(1,4)]
     public int ySize = 4;
     [Range(0.25f, 2f)]
     public float itemScale = 1;
@@ -24,19 +25,33 @@ public class Store : MonoBehaviour
     void Awake()
     {
         instance = this;
-        foreach (var item in _items)
+
+        foreach (var item in initialItems)
         {
-            _items.AddLast(item);
+            activeItems.AddLast(item);
+            remainingItems.AddLast(item);
         }
     }
 
     private void Start()
     {
-        Redistribute();
+        SaveItemID(initialItems);
+        Redistribute(remainingItems);
     }
 
+    // Todavia nada.
+    public void SaveItemID(List<GameObject> items)
+    {
+        //var itemID = new Tuple<string, Item.ItemType, int>("", Item.ItemType.armor, 0);
+        
+        foreach (var item in items)
+        {
+
+        }
+    }
+    
     // Se deshace de los elementos anteriores y redistribuye los objetos restantes en la tienda.
-    public void Redistribute()
+    public void Redistribute(IEnumerable<GameObject> col = default)
     {
         foreach (var item in spawnedItems)
         {
@@ -44,19 +59,46 @@ public class Store : MonoBehaviour
         }
         spawnedItems.Clear();
 
-        DistributeItems(items.Select(x => x.gameObject));
+        DistributeItems(col.Select(x => x.gameObject));
+    }
+
+    // Si algun nombre de objeto no presenta coincidencias con el de el texto del input, se lo filtra.
+    public void FilterByText(string inputText, bool contextSensitivity = false)
+    {
+        // si el texto esta vacio, vuelve a mostrar todos los objetos.
+        if (inputText == "") 
+        {
+            Redistribute(remainingItems);
+            print(inputText);
+            return;
+        }
+        
+        var filteredItems = activeItems.
+                            /*convertido a items*/ Select(x => x.GetComponent<Item>()).
+                            /*si su nombre contiene al texto*/ Where(x => x.CompareNames(inputText, contextSensitivity)).
+                            /*ordenar por*/ OrderByTextMatch(inputText);
+
+        if (filteredItems.Count() <= 0)
+        {
+            foreach (var fi in filteredItems)
+            {
+                print(fi.GetComponent<Item>().itemName);
+            }
+        }
+        else 
+        { 
+            print("Ningun elemento tiene ese nombre"); 
+        } 
+
+        Redistribute(filteredItems);
     }
 
     #region ORGANIZACION DE ITEMS
-    // Genera filas, cada una con su cantidad de items correspondientes.
+    // Instancia las filas, cada una con su cantidad de items correspondientes.
     public void DistributeItems(IEnumerable<GameObject> allItems)
     {       
-        LinkedList<GameObject> _allItems = new();
-
-        foreach (var item in allItems) _allItems.AddLast(item);
-
-        var rows = OrganizeItems(_allItems);
-        items.Clear();
+        var rows = SubdivideItems(allItems).ToList();
+        if (activeItems.Any(x => x != null)) activeItems.Clear(); else print("La lista ya estaba vacía.");
 
         foreach (var row in rows)
         {
@@ -68,15 +110,15 @@ public class Store : MonoBehaviour
                 var i = Instantiate(item, newRow.transform);
                 i.GetComponent<Image>().sprite = i.GetComponent<Item>().sprite;
                 i.RescaleItem(itemScale);
-                items.Add(i);
+                activeItems.AddLast(i);
             }
         }
 
-        print($"REDISTRIBUTED: Rows = {rows.Count}; Total items = {items.Count}.");
+        print($"REDISTRIBUTED: Rows = {rows.Count}; Total items = {activeItems.Count}.");
     }
 
-    // Divide la lista en sublistas, cada una representando una fila de la distribucion.
-    List<List<GameObject>> OrganizeItems(LinkedList<GameObject> allItems)
+    // Divide la coleccion en listas mas pequeñas (filas), cada una representando una fila de la distribucion.
+    IEnumerable<List<GameObject>> SubdivideItems(IEnumerable<GameObject> allItems)
     {
         bool hasItemsLeft = true;
         List<List<GameObject>> rows = new();
@@ -84,18 +126,17 @@ public class Store : MonoBehaviour
         List<GameObject> i = new();
         while (hasItemsLeft)
         {
-            int c = allItems.Count;
             List<GameObject> newRow = new();
 
             foreach (var item in allItems.Skip(i.Count))
             {
                 newRow.Add(item);
                 i.Add(item);
-                if (newRow.Count >= xSize || i.Count >= c) break;
+                if (newRow.Count >= xSize || i.Count >= allItems.Count()) break;
             }
 
-            if (rows.Count <= ySize) rows.Add(newRow); else print("Not enough space for your items.");
-            if (i.Count >= c) hasItemsLeft = false;
+            if (rows.Count <= ySize - 1) rows.Add(newRow); else print("Not enough space for your items.");
+            if (i.Count >= allItems.Count()) hasItemsLeft = false;
         }
 
         return rows;

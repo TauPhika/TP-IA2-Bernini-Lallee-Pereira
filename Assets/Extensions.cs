@@ -17,4 +17,20 @@ public static class Extensions
         i.GetComponentInParent<HorizontalLayoutGroup>().spacing *= itemScale;
         i.GetComponentInParent<VerticalLayoutGroup>().spacing *= itemScale;
     }
+
+    public static IEnumerable<GameObject> OrderByTextMatch(this IEnumerable<Item> col, string inputText)
+    {
+        var newCol = col;
+
+        foreach (var c in inputText)
+        {
+            if (inputText.Skip(inputText.IndexOf(c) - 1).FirstOrDefault() != default)
+            {
+                newCol.OrderByDescending(x => x.itemName.Contains(inputText.Skip(inputText.IndexOf(c) - 1).First()));
+            }
+        }
+
+        return newCol.Select(x => x.gameObject);
+
+    }
 }
