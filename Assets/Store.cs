@@ -19,7 +19,7 @@ public class Store : MonoBehaviour
     public int ySize = 4;
     [Range(0.25f, 2f)]
     public float itemScale = 1;
-    List<GameObject> spawnedItems = new();
+    List<GameObject> spawnedRows = new();
 
     // Start is called before the first frame update
     void Awake()
@@ -35,7 +35,7 @@ public class Store : MonoBehaviour
 
     private void Start()
     {
-        SaveItemID(initialItems);
+        //SaveItemID(initialItems);
         Redistribute(remainingItems);
     }
 
@@ -53,11 +53,11 @@ public class Store : MonoBehaviour
     // Se deshace de los elementos anteriores y redistribuye los objetos restantes en la tienda.
     public void Redistribute(IEnumerable<GameObject> col = default)
     {
-        foreach (var item in spawnedItems)
+        foreach (var item in spawnedRows)
         {
             Destroy(item);
         }
-        spawnedItems.Clear();
+        spawnedRows.Clear();
 
         DistributeItems(col.Select(x => x.gameObject));
     }
@@ -103,7 +103,7 @@ public class Store : MonoBehaviour
         foreach (var row in rows)
         {
             var newRow = Instantiate(rowPrefab, itemOrganizer.transform);
-            spawnedItems.Add(newRow);
+            spawnedRows.Add(newRow);
 
             foreach (var item in row)
             {

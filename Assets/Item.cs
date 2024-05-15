@@ -58,7 +58,7 @@ public class Item : Items
         {
             if (!contextSensitive)
             {
-                if (itemName.Skip(inputText.IndexOf(c) - 1).First() == c) matching.Add(true); 
+                if (itemName.Skip(inputText.IndexOf(c)).First() == c) matching.Add(true); 
                 else matching.Add(false);
 
                 print(matching[inputText.IndexOf(c)]);
