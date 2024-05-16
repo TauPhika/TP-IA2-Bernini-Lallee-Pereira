@@ -37,6 +37,7 @@ public class Item : Items
         if (Wallet.money >= price)
         {
             Store.instance.remainingItems.Remove(this.gameObject);
+            print(Store.instance.remainingItems.Count);
             Store.instance.activeItems.Remove(this.gameObject);
 
             Store.instance.Redistribute(Store.instance.activeItems);
@@ -44,7 +45,7 @@ public class Item : Items
             Destroy(gameObject);
             Wallet.money -= price;
 
-            print($"PURCHASED: Total items left = {Store.instance.initialItems.Count}; Money left = {Wallet.money}.");
+            print($"PURCHASED: Total items left = {Store.instance.remainingItems.Count}; Money left = {Wallet.money}.");
 
         }
         else print($"NOT ENOUGH MONEY: Current money = {Wallet.money}; Missing money = {price - Wallet.money}");

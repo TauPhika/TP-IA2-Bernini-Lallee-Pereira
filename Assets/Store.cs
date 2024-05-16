@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using System.Linq;
 using UnityEngine.UI;
+using TMPro;
 
 public class Store : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class Store : MonoBehaviour
 
     public GameObject itemOrganizer;
     public GameObject rowPrefab;
+    public TextMeshProUGUI moneyText;
     [Range(1,10)]
     public int xSize = 5;
     [Range(1,4)]
@@ -39,10 +42,15 @@ public class Store : MonoBehaviour
         Redistribute(remainingItems);
     }
 
+    private void Update()
+    {
+        moneyText.text = $"Money : {Wallet.money}";
+    }
+
     // Todavia nada.
     public void SaveItemID(List<GameObject> items)
     {
-        //var itemID = new Tuple<string, Item.ItemType, int>("", Item.ItemType.armor, 0);
+        var itemID = Tuple.Create("", Item.ItemType.armor, 0);
         
         foreach (var item in items)
         {
@@ -59,9 +67,10 @@ public class Store : MonoBehaviour
         }
         spawnedRows.Clear();
 
-        DistributeItems(col.Select(x => x.gameObject));
+        DistributeItems(col);
     }
 
+    #region FILTROS
     // Si algun nombre de objeto no presenta coincidencias con el de el texto del input, se lo filtra.
     public void FilterByText(string inputText, bool contextSensitivity = false)
     {
@@ -92,6 +101,7 @@ public class Store : MonoBehaviour
 
         Redistribute(filteredItems);
     }
+    #endregion
 
     #region ORGANIZACION DE ITEMS
     // Instancia las filas, cada una con su cantidad de items correspondientes.
