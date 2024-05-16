@@ -8,17 +8,25 @@ using TMPro;
 
 public class Store : MonoBehaviour
 {
+    #region VARIABLES
     public static Store instance;
     StoreFilters _storeFilters;
+
+    [Header("ALL ITEMS")]
     public List<GameObject> initialItems;
     public LinkedList<GameObject> activeItems = new();
     public LinkedList<GameObject> remainingItems = new();
 
     public GameObject itemOrganizer;
     public GameObject rowPrefab;
+
+    [Header("NOTIFIERS")]
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI notifyText;
+    public TextMeshProUGUI infoText;
     public float notificationTime;
+
+    [Header("SIZE ADJUST")]
     [Range(1,6)]
     public int xSize = 5;
     [Range(1,4)]
@@ -26,12 +34,15 @@ public class Store : MonoBehaviour
     //[Range(0.25f, 2f)]
     //public float itemScale = 1;
     List<GameObject> spawnedRows = new();
+    List<Tuple<int, int, string>> allItemInfo = new();
+    #endregion
 
     // Start is called before the first frame update
     void Awake()
     {
         instance = this;
         _storeFilters = GetComponent<StoreFilters>();
+        allItemInfo = MakeItemInfo();
 
         foreach (var item in initialItems)
         {
@@ -44,8 +55,65 @@ public class Store : MonoBehaviour
     {
         //SaveItemID(initialItems);
         _storeFilters.UpdateFiltering();
-        StartCoroutine(NotifyText("WELCOME"));
+        infoText.text = "Welcome! Right click any item to learn about them.";
     }
+
+    #region DESCRIPTION
+    //private void Update()
+    //{
+    //    OnHoveringOverItems();
+    //}
+
+    //public void OnHoveringOverItems()
+    //{
+    //    Ray ray; 
+    //    RaycastHit hit;
+
+    //    ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+    //    if (Physics.Raycast(ray, out hit))
+    //    {
+    //        if (hit.collider.gameObject.GetComponentInParent<Item>())
+    //        {
+    //            infoText.text = hit.collider.gameObject.GetComponentInParent<Item>().itemInfo;
+    //            print(hit.transform.gameObject.name);
+    //        }
+    //    }
+    //}
+
+    // Construye una descripcion del item en base a sus variables.
+    public List<Tuple<int,int,string>> MakeItemInfo()
+    {
+        var firstList = initialItems.Select(x => x.GetComponent<Item>().firstInfo);
+        var secondList = initialItems.Select(x => x.GetComponent<Item>().secondInfo);
+        var descriptionList = initialItems.
+                              Aggregate(new List<string>(), (acum, current) => 
+                              {
+                                  acum.Add(current.GetComponent<Item>().description);
+                                  return acum;
+                              }).
+                              ToList();
+
+        var itemInfoList = firstList.
+                           Zip(secondList, (v1, v2) => new {var1 = v1, var2 = v2}).
+                           Zip(descriptionList, (d1, d2) => new Tuple<int, int, string>(d1.var1, d1.var2, d2)).
+                           ToList();
+
+        foreach (var item in initialItems.Select(x => x.GetComponent<Item>()))
+        {
+            var currentInfo = itemInfoList[initialItems.IndexOf(item.gameObject)];
+
+            if(item is ItemArmor)
+            item.GetComponent<Item>().itemInfo = $"Defense = {currentInfo.Item1}.  |  Durability = {currentInfo.Item2}.  |  {currentInfo.Item3}";
+            else if(item is ItemPotion)
+            item.GetComponent<Item>().itemInfo = $"Level = {currentInfo.Item1}.  |  Duration = {currentInfo.Item2}.  |  {currentInfo.Item3}";
+            else if (item is ItemWeapon)
+            item.GetComponent<Item>().itemInfo = $"Damage = {currentInfo.Item1}.  |  Durability = {currentInfo.Item2}.  |  {currentInfo.Item3}";
+        }
+
+        return itemInfoList;
+    }
+    #endregion
 
     #region FILTROS
     // Si algun nombre de objeto no presenta coincidencias con el de el texto del input, se lo filtra.
@@ -112,8 +180,7 @@ public class Store : MonoBehaviour
 
                             return acum;
                         });
-        
-        print($"There are {filteredItems.Count} items that match the type {typeText}");
+       
         Redistribute(filteredItems);
         return filteredItems;
 
@@ -139,7 +206,7 @@ public class Store : MonoBehaviour
             orderedItems = orderedItems.ByPrice(_storeFilters.inverseOrder);
         }
 
-        print($"Ordered {opt}");
+        infoText.text = $"The {orderedItems.Count()} items that match your request have been ordered by {opt.ToLower()}.";
         Redistribute(orderedItems);
         return orderedItems;
     }
@@ -217,17 +284,6 @@ public class Store : MonoBehaviour
         moneyText.text = $"Money : {Wallet.money}";
         yield return new WaitForSeconds(notificationTime);
         notifyText.text = "";
-    }
-
-    // Todavia nada.
-    public void SaveItemID(List<GameObject> items)
-    {
-        var itemID = Tuple.Create("", Item.ItemType.ARMOR, 0);
-
-        foreach (var item in items)
-        {
-
-        }
     }
 
 }

@@ -12,6 +12,7 @@ public class StoreFilters : MonoBehaviour
     public TMP_InputField inputField;
     public Toggle inverseToggle;
     public Toggle contextToggle;
+    public Toggle affordToggle;
     [HideInInspector] public bool inputIsContextSensitive = false;
     [HideInInspector] public bool inverseOrder = false;
 
