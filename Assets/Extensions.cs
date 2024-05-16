@@ -24,13 +24,32 @@ public static class Extensions
 
         foreach (var c in inputText)
         {
-            if (inputText.Skip(inputText.IndexOf(c) - 1).FirstOrDefault() != default)
+            if (inputText.Skip(inputText.IndexOf(c)).FirstOrDefault() != default)
             {
-                newCol.OrderByDescending(x => x.itemName.Contains(inputText.Skip(inputText.IndexOf(c) - 1).First()));
+                newCol.OrderByDescending(x => x.itemName.Contains(inputText.Skip(inputText.IndexOf(c)).First()));
             }
         }
 
         return newCol.Select(x => x.gameObject);
 
     }
+
+    public static IEnumerable<GameObject> Alphabetically(this IEnumerable<GameObject> col, bool firstToLast = true)
+    {
+        if(firstToLast) return col.OrderBy(x => x.name); 
+        else return col.OrderByDescending(x => x.name);
+    } 
+    
+    public static IEnumerable<GameObject> ByType(this IEnumerable<GameObject> col, bool firstToLast = true)
+    {
+        if (firstToLast) return col.OrderBy(x => x.GetComponent<Item>().itemType);
+        else return col.OrderByDescending(x => x.GetComponent<Item>().itemType);
+    }
+
+    public static IEnumerable<GameObject> ByPrice(this IEnumerable<GameObject> col, bool cheapToExpensive = true)
+    {
+        if(cheapToExpensive) return col.OrderBy(x => x.GetComponent<Item>().price);
+        else return col.OrderByDescending(x => x.GetComponent<Item>().price);
+    }
+
 }

@@ -42,15 +42,21 @@ public class Item : Items
 
             Store.instance.Redistribute(Store.instance.activeItems);
 
+            Store.instance.StartCoroutine(Store.instance.NotifyText("PURCHASED"));
             Destroy(gameObject);
             Wallet.money -= price;
 
             print($"PURCHASED: Total items left = {Store.instance.remainingItems.Count}; Money left = {Wallet.money}.");
 
         }
-        else print($"NOT ENOUGH MONEY: Current money = {Wallet.money}; Missing money = {price - Wallet.money}");
+        else 
+        {
+            print($"NOT ENOUGH MONEY: Current money = {Wallet.money}; Missing money = {price - Wallet.money}");
+            StartCoroutine(Store.instance.NotifyText("NOT ENOUGH"));
+        } 
     }
 
+    // Compara el texto pasado con el nombre de este objeto
     public bool CompareNames(string inputText, bool contextSensitive = false)
     {
         var matching = new List<bool>();
@@ -66,7 +72,7 @@ public class Item : Items
             }
             else
             {
-                if (itemName.SkipWhile(x => x != c).DefaultIfEmpty() != default) matching.Add(true);
+                if (itemName.Contains(c)) matching.Add(true);
                 else matching.Add(false);
 
             }
