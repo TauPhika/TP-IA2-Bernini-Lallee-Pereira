@@ -495,5 +495,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 0
   sprite: {fileID: 21300000, guid: 5293db86bf3b56d4e9db2de4620d39a9, type: 3}
-  itemName: Poison
+  itemName: POISON
   price: 10
