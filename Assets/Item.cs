@@ -45,13 +45,9 @@ public class Item : Items
             Store.instance.StartCoroutine(Store.instance.NotifyText("PURCHASED"));
             Destroy(gameObject);
             Wallet.money -= price;
-
-            print($"PURCHASED: Total items left = {Store.instance.remainingItems.Count}; Money left = {Wallet.money}.");
-
         }
         else 
         {
-            print($"NOT ENOUGH MONEY: Current money = {Wallet.money}; Missing money = {price - Wallet.money}");
             StartCoroutine(Store.instance.NotifyText("NOT ENOUGH"));
         } 
     }

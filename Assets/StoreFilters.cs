@@ -30,13 +30,11 @@ public class StoreFilters : MonoBehaviour
     public void InverseOrder()
     {
         inverseOrder = !inverseToggle.isOn;
-        print(inverseOrder);
     }
     
     public void ContextSensitive()
     {
         inputIsContextSensitive = contextToggle.isOn;
-        print(inputIsContextSensitive);
     }
 
 }

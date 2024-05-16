@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: 1
-  sprite: {fileID: 21300000, guid: 7fa801a6046f54d47931aae24f8e74b1, type: 3}
+  sprite: {fileID: 21300000, guid: 99f56c9857fe4a74c925c61cda663a04, type: 3}
   itemName: HEALING POTION
   price: 5
 --- !u!1 &9058791702033973109

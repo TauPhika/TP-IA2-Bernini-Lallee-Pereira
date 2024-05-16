@@ -19,12 +19,12 @@ public class Store : MonoBehaviour
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI notifyText;
     public float notificationTime;
-    [Range(1,10)]
+    [Range(1,6)]
     public int xSize = 5;
     [Range(1,4)]
     public int ySize = 4;
-    [Range(0.25f, 2f)]
-    public float itemScale = 1;
+    //[Range(0.25f, 2f)]
+    //public float itemScale = 1;
     List<GameObject> spawnedRows = new();
 
     // Start is called before the first frame update
@@ -44,6 +44,7 @@ public class Store : MonoBehaviour
     {
         //SaveItemID(initialItems);
         _storeFilters.UpdateFiltering();
+        StartCoroutine(NotifyText("WELCOME"));
     }
 
     #region FILTROS
@@ -61,7 +62,7 @@ public class Store : MonoBehaviour
 
         var filteredItems = activeItems.
                             /*convertido a items*/ Select(x => x.GetComponent<Item>()).
-                            /*si su nombre contiene al texto*/ Where(x => x.CompareNames(inputText, contextSensitivity)).
+                            /*si su nombre contiene al texto*/ Where(x => x.CompareNames(inputText.ToUpper(), contextSensitivity)).
                             /*ordenar por*/ OrderByTextMatch(inputText);
 
         if (filteredItems.Count() <= 0)
@@ -88,8 +89,8 @@ public class Store : MonoBehaviour
         Redistribute(activeItems);
 
         var filteredItems = activeItems.
-                            Where(x => typeText.Contains(x.GetComponent<Item>().itemType.ToString())).
-                            OrderBy(x => x.name.First()).
+                            /*del tipo deseado*/ Where(x => typeText.Contains(x.GetComponent<Item>().itemType.ToString())).
+                            /*en orden casi alfabetico*/ OrderBy(x => x.name.First()).
                             ThenBy(x => x.name.Skip(1).FirstOrDefault()).
                             ToList();
 
@@ -174,12 +175,12 @@ public class Store : MonoBehaviour
             {
                 var i = Instantiate(item, newRow.transform);
                 i.GetComponent<Image>().sprite = i.GetComponent<Item>().sprite;
-                i.RescaleItem(itemScale);
+                //i.RescaleItem(itemScale);
                 activeItems.AddLast(i);
             }
         }
 
-        print($"REDISTRIBUTED: Rows = {rows.Count}; Total items = {activeItems.Count}.");
+        //print($"REDISTRIBUTED: Rows = {rows.Count}; Total items = {activeItems.Count}.");
     }
 
     // Divide la coleccion en listas mas pequeñas (filas), cada una representando una fila de la distribucion.

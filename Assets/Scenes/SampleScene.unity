@@ -587,7 +587,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -239, y: 850}
+  m_AnchoredPosition: {x: -239, y: 800}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &368850412
@@ -1151,7 +1151,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200, y: -200}
+  m_AnchoredPosition: {x: 200, y: -175}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &419172111
@@ -1990,7 +1990,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -237, y: 216}
+  m_AnchoredPosition: {x: -237, y: 150}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &719350159
@@ -3955,12 +3955,12 @@ RectTransform:
   - {fileID: 1963102094}
   - {fileID: 1198160733}
   - {fileID: 719350158}
+  - {fileID: 368850411}
   - {fileID: 786801419}
+  - {fileID: 1474284555}
   - {fileID: 419172109}
   - {fileID: 1549711732}
   - {fileID: 1682446734}
-  - {fileID: 1474284555}
-  - {fileID: 368850411}
   - {fileID: 226486099}
   - {fileID: 471991018}
   m_Father: {fileID: 0}
@@ -3992,6 +3992,18 @@ MonoBehaviour:
   - {fileID: 5830751443448575966, guid: 0804f4c8bfc7acf4989085cab8e32e40, type: 3}
   - {fileID: 5830751443448575966, guid: 121afb2f9ea98fe4f997d464daf871ec, type: 3}
   - {fileID: 5830751443448575966, guid: eec71b532d8f2a048a06f2c5cde8b69d, type: 3}
+  - {fileID: 5830751443448575966, guid: dde408911b961b84d8a6c349c4b73b7c, type: 3}
+  - {fileID: 5830751443448575966, guid: 80746f485532a9c478a01e749e6b717b, type: 3}
+  - {fileID: 5830751443448575966, guid: 1fa1b47a04eb73c408271e9efd15ba22, type: 3}
+  - {fileID: 5830751443448575966, guid: ba3b38d4a9ec4ea468317c2d1fdb2a0c, type: 3}
+  - {fileID: 5830751443448575966, guid: 0862f944dd898cb42b2bdd18fbe9f5b1, type: 3}
+  - {fileID: 5830751443448575966, guid: 5357333c29f24ce48a440635d261faf9, type: 3}
+  - {fileID: 5830751443448575966, guid: c11a4be0e4771aa419a8285426c12ef2, type: 3}
+  - {fileID: 5830751443448575966, guid: 694e463f042b0f84dac9928334d6e974, type: 3}
+  - {fileID: 5830751443448575966, guid: 3af584b30b2b74d49b035f0c1f72ed2d, type: 3}
+  - {fileID: 5830751443448575966, guid: 2fff31cee1b758641bac956430096209, type: 3}
+  - {fileID: 5830751443448575966, guid: 0386cf3fa913a644ca32488298ffd5ea, type: 3}
+  - {fileID: 5830751443448575966, guid: af9fbd88fc572c049a29d2a77159de6c, type: 3}
   itemOrganizer: {fileID: 419172108}
   rowPrefab: {fileID: 6956964616555194157, guid: b27510480025d8e4f943fb337c8d3261, type: 3}
   moneyText: {fileID: 1549711730}
@@ -3999,7 +4011,6 @@ MonoBehaviour:
   notificationTime: 1
   xSize: 6
   ySize: 4
-  itemScale: 1
 --- !u!114 &1733660161
 MonoBehaviour:
   m_ObjectHideFlags: 0
