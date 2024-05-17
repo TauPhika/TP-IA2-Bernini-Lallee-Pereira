@@ -10,7 +10,7 @@ public class Store : MonoBehaviour
 {
     #region VARIABLES
     public static Store instance;
-    StoreFilters _storeFilters;
+    [HideInInspector] public StoreFilters storeFilters;
 
     [Header("ALL ITEMS")]
     public List<GameObject> initialItems;
@@ -42,7 +42,7 @@ public class Store : MonoBehaviour
     void Awake()
     {
         instance = this;
-        _storeFilters = GetComponent<StoreFilters>();
+        storeFilters = GetComponent<StoreFilters>();
         allItemInfo = MakeItemInfo();
 
         foreach (var item in initialItems)
@@ -55,8 +55,9 @@ public class Store : MonoBehaviour
     private void Start()
     {
         //SaveItemID(initialItems);
-        _storeFilters.UpdateFiltering();
-        infoText.text = "Welcome! Right click any item to learn about them.";
+        Redistribute(remainingItems);
+        storeFilters.UpdateFiltering();
+        infoText.text = "Welcome! Hover your mouse over any item to learn about them.";
         moneyText.text = $"Coins: {Wallet.money}";
         dollarsText.text = $"Dollars: ${Wallet.dollars}";
 
@@ -128,11 +129,10 @@ public class Store : MonoBehaviour
         {
             _plusTextFilter = false;
             Redistribute(remainingItems);
-            print(inputText);
-            return activeItems;
+            return remainingItems;
         }
 
-        var filteredItems = activeItems.
+        var filteredItems = remainingItems.
                             /*convertido a items*/ Select(x => x.GetComponent<Item>()).
                             /*si su nombre contiene al texto*/ Where(x => x.CompareNames(inputText.ToUpper(), contextSensitivity)).
                             /*ordenar por*/ OrderByTextMatch(inputText);
@@ -158,11 +158,11 @@ public class Store : MonoBehaviour
     public IEnumerable<GameObject> FilterByType(TMP_Dropdown.OptionData option, IEnumerable<GameObject> filteredByText = default)
     {
         string typeText = option.text.ToUpper();
-        Redistribute(activeItems);
+        Redistribute(remainingItems);
 
-        var armorItems = activeItems.Select(x => x.GetComponent<Item>()).OfType<ItemArmor>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
-        var potionItems = activeItems.Select(x => x.GetComponent<Item>()).OfType<ItemPotion>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
-        var weaponItems = activeItems.Select(x => x.GetComponent<Item>()).OfType<ItemWeapon>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
+        var armorItems = remainingItems.Select(x => x.GetComponent<Item>()).OfType<ItemArmor>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
+        var potionItems = remainingItems.Select(x => x.GetComponent<Item>()).OfType<ItemPotion>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
+        var weaponItems = remainingItems.Select(x => x.GetComponent<Item>()).OfType<ItemWeapon>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
 
         List<GameObject> fItems = new();
 
@@ -174,7 +174,7 @@ public class Store : MonoBehaviour
         {
             fItems = potionItems.Select(x => x.gameObject).ToList();
         }
-        else if (typeText.Contains("POTION"))
+        else if (typeText.Contains("WEAPON"))
         {
             fItems = weaponItems.Select(x => x.gameObject).ToList();
         }
@@ -212,15 +212,15 @@ public class Store : MonoBehaviour
         
         if(opt == "NAME")
         {
-            orderedItems = orderedItems.Alphabetically(_storeFilters.inverseOrder);
+            orderedItems = orderedItems.Alphabetically(storeFilters.inverseOrder);
         }
         else if (opt == "TYPE")
         {
-            orderedItems = orderedItems.ByType(_storeFilters.inverseOrder);
+            orderedItems = orderedItems.ByType(storeFilters.inverseOrder);
         }
         else if (opt == "PRICE")
         {
-            orderedItems = orderedItems.ByPrice(_storeFilters.inverseOrder);
+            orderedItems = orderedItems.ByPrice(storeFilters.inverseOrder);
         }
 
         infoText.text = $"The {orderedItems.Count()} items that match your request have been ordered by {opt.ToLower()}.";

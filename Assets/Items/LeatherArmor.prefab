@@ -147,7 +147,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - eventID: 4
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: -8174264083088007142}
+          m_TargetAssemblyTypeName: Item, Assembly-CSharp
+          m_MethodName: ShowInfo
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -388,15 +404,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9176f282d663237439d99753669aab1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
   sprite: {fileID: 21300000, guid: 66c855a43f4665749b646da2aee92daf, type: 3}
   itemName: LEATHER ARMOR
-  itemInfo: Defense = 15. -  Durability = 20. -  A cheap piece of armor mad of hardened
-    salamander skin.
+  itemInfo: Defense = 15.  |  Durability = 20.  |  A cheap piece of armor mad of
+    hardened salamander skin.
   price: 25
   firstInfo: 15
   secondInfo: 20
   description: A cheap piece of armor mad of hardened salamander skin.
+  isPremium: 0
 --- !u!65 &8384737757055143190
 BoxCollider:
   m_ObjectHideFlags: 0

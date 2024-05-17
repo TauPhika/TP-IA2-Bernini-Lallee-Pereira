@@ -147,7 +147,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - eventID: 4
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 628435338626304233}
+          m_TargetAssemblyTypeName: Item, Assembly-CSharp
+          m_MethodName: ShowInfo
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -388,14 +404,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9176f282d663237439d99753669aab1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
   sprite: {fileID: 21300000, guid: dc94ab943843cd345b171b723c5568e3, type: 3}
   itemName: DRAGON ARMOR
-  itemInfo: Defense = 40. -  Durability = 10. -  Very resistant yet also very fragile.
+  itemInfo: Defense = 40.  |  Durability = 10.  |  Very resistant yet also very fragile.
   price: 70
   firstInfo: 40
   secondInfo: 10
   description: Very resistant yet also very fragile.
+  isPremium: 0
 --- !u!65 &5164683655802044369
 BoxCollider:
   m_ObjectHideFlags: 0

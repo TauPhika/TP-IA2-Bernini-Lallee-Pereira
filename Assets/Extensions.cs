@@ -18,6 +18,27 @@ public static class Extensions
     //    i.GetComponentInParent<VerticalLayoutGroup>().spacing *= itemScale;
     //}
 
+    // Activa o desactiva todos los items de la lista.
+    public static IEnumerable<GameObject> SetAllActive(this IEnumerable<GameObject> col, bool active)
+    {
+        if (active) 
+        return col.Aggregate(new List<GameObject>(), (acum, current) =>
+        {
+             if (!current.activeInHierarchy) current.SetActive(true);
+
+             acum.Add(current);
+             return acum;
+        });
+        else return col.Aggregate(new List<GameObject>(), (acum, current) =>
+        {
+            if (current.activeInHierarchy) current.SetActive(false);
+
+            acum.Add(current);
+            return acum;
+        });
+    }
+
+    // Ordena los items por su coincidencia con el texto escrito cuando ContextSensitive esta activado.
     public static IEnumerable<GameObject> OrderByTextMatch(this IEnumerable<Item> col, string inputText)
     {
         var newCol = col;
@@ -34,12 +55,14 @@ public static class Extensions
 
     }
 
+    // Devuelve los items ordenados por nombre.
     public static IEnumerable<GameObject> Alphabetically(this IEnumerable<GameObject> col, bool firstToLast = true)
     {
         if(firstToLast) return col.OrderBy(x => x.name); 
         else return col.OrderByDescending(x => x.name);
     } 
     
+    // Divide los items en sublistas organizadas de cada tipo y las devuelve concatenadas.
     public static IEnumerable<GameObject> ByType(this IEnumerable<GameObject> col, bool firstToLast = true)
     {
         IEnumerable<GameObject> newCol;
@@ -51,8 +74,8 @@ public static class Extensions
             var weaponItems = col.Select(x => x.GetComponent<Item>()).OfType<ItemWeapon>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
 
             newCol = armorItems.Select(x => x.gameObject).
-                                Concat(potionItems.Select(x => x.gameObject)).
-                                Concat(weaponItems.Select(x => x.gameObject));
+                                Concat(weaponItems.Select(x => x.gameObject)).
+                                Concat(potionItems.Select(x => x.gameObject));
         }
         else
         {
@@ -60,14 +83,15 @@ public static class Extensions
             var potionItems = col.Select(x => x.GetComponent<Item>()).OfType<ItemPotion>().OrderByDescending(x => x.name.First()).ThenByDescending(x => x.name.Skip(1).FirstOrDefault());
             var weaponItems = col.Select(x => x.GetComponent<Item>()).OfType<ItemWeapon>().OrderByDescending(x => x.name.First()).ThenByDescending(x => x.name.Skip(1).FirstOrDefault());
 
-            newCol = weaponItems.Select(x => x.gameObject).
-                                Concat(potionItems.Select(x => x.gameObject)).
+            newCol = potionItems.Select(x => x.gameObject).
+                                Concat(weaponItems.Select(x => x.gameObject)).
                                 Concat(armorItems.Select(x => x.gameObject));
         }
 
         return newCol;
     }
 
+    // Organiza la lista por precio, separando entre objetos comunes y premium.
     public static IEnumerable<GameObject> ByPrice(this IEnumerable<GameObject> col, bool cheapToExpensive = true)
     {
         IEnumerable<GameObject> newCol;

@@ -24,8 +24,11 @@ public class Inventory : MonoBehaviour
     {
         instance = this;
 
-        inventoryDisplay.Add(moneyDisplay.gameObject);
-        inventoryDisplay.Add(dollarsDisplay.gameObject);
+        moneyDisplay.text = $"Coins: {Wallet.money}";
+        dollarsDisplay.text = $"Dollars: ${Wallet.dollars}";
+
+        inventoryDisplay.Add(Instantiate(moneyDisplay.gameObject, inventoryPanel));
+        inventoryDisplay.Add(Instantiate(dollarsDisplay.gameObject, inventoryPanel));
     }
 
     private void Start()
@@ -35,7 +38,11 @@ public class Inventory : MonoBehaviour
 
     public void GotNewItem(GameObject newItem = default)
     {
-        List<GameObject> keepCol = inventoryDisplay.TakeWhile(x => x.GetComponent<TextMeshProUGUI>()).ToList();
+        List<GameObject> keepCol = inventoryDisplay.
+                                   TakeWhile(x => x.GetComponent<TextMeshProUGUI>()).
+                                   SetAllActive(true).
+                                   ToList();
+
         print($"Textos = {keepCol.Count()}.");
         //{ if (!x.activeInHierarchy) x.SetActive(true); return x; }
         inventoryDisplay.Remove(newItem);

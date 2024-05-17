@@ -6,9 +6,10 @@ using System.Linq;
 using UnityEngine.UI;
 using TMPro;
 
-public abstract class Item : Items
+public abstract class Item : MonoBehaviour
 {
-    public ItemType itemType;
+    //public enum ItemType { ARMOR, POTION, WEAPON }
+    //public ItemType itemType;
     public Sprite sprite;
     public string itemName;
     [HideInInspector] public string itemInfo;
@@ -54,8 +55,9 @@ public abstract class Item : Items
         {
             Store.instance.remainingItems.Remove(this.gameObject);
             Store.instance.activeItems.Remove(this.gameObject);
-            
-            Store.instance.Redistribute(Store.instance.activeItems);
+
+            Store.instance.Redistribute(Store.instance.remainingItems);
+            Store.instance.storeFilters.UpdateFiltering();
 
             Inventory.instance.GotNewItem(gameObject);
 
@@ -71,13 +73,16 @@ public abstract class Item : Items
 
 
         Store.instance.moneyText.text = $"Coins: {Wallet.money}";
+        Inventory.instance.moneyDisplay.text = $"Coins: {Wallet.money}";
         Store.instance.dollarsText.text = $"Dollars: ${Wallet.dollars}";
+        Inventory.instance.dollarsDisplay.text = $"Dollars: ${Wallet.dollars}";
     }
 
 
     public void ShowInfo()
     {
-        Store.instance.infoText.text = itemInfo;
+        if (Store.instance.infoText.text != itemInfo) Store.instance.infoText.text = itemInfo;
+        else Store.instance.infoText.text = "Welcome! Hover your mouse over any item to learn about them.";
     }
 
     // Compara el texto pasado con el nombre de este objeto
@@ -92,7 +97,7 @@ public abstract class Item : Items
                 if (itemName.Skip(inputText.IndexOf(c)).First() == c) matching.Add(true); 
                 else matching.Add(false);
 
-                print(matching[inputText.IndexOf(c)]);
+                //print(matching[inputText.IndexOf(c)]);
             }
             else
             {

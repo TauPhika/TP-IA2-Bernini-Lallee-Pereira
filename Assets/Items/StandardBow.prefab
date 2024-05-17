@@ -147,7 +147,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - eventID: 4
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: -6954393031175775307}
+          m_TargetAssemblyTypeName: Item, Assembly-CSharp
+          m_MethodName: ShowInfo
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -388,14 +404,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54a60cb4cc9857c439eb48c8fb5ccc2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 2
   sprite: {fileID: 21300000, guid: 726be1e343aed674a8a0295166163e8b, type: 3}
   itemName: STANDARD BOW
-  itemInfo: Damage = 5. -  Durability = 30. -  A squirrel's worst nightmare.
+  itemInfo: Damage = 5.  |  Durability = 30.  |  A squirrel's worst nightmare.
   price: 35
   firstInfo: 5
   secondInfo: 30
   description: A squirrel's worst nightmare.
+  isPremium: 0
 --- !u!65 &2536804376135750048
 BoxCollider:
   m_ObjectHideFlags: 0

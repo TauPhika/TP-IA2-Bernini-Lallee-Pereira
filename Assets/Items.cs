@@ -5,6 +5,5 @@ using UnityEngine;
 
 public abstract class Items : MonoBehaviour
 {
-    public enum ItemType { ARMOR, POTION, WEAPON }
  
 }

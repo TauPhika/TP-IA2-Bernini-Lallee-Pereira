@@ -147,7 +147,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - eventID: 4
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: -6713168252076216342}
+          m_TargetAssemblyTypeName: Item, Assembly-CSharp
+          m_MethodName: ShowInfo
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
     callback:
       m_PersistentCalls:
         m_Calls:
@@ -388,15 +404,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3462a0f81762046bcc91a482165e9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 1
   sprite: {fileID: 21300000, guid: dc3fc28ff1c987e4d8074530b2591a36, type: 3}
   itemName: SPEED POTION
-  itemInfo: Level = 1. -  Duration = 10. -  Boosts your speed for a short period
+  itemInfo: Level = 1.  |  Duration = 10.  |  Boosts your speed for a short period
     of time.
   price: 3
   firstInfo: 1
   secondInfo: 10
   description: Boosts your speed for a short period of time.
+  isPremium: 0
 --- !u!65 &-7560948087835305470
 BoxCollider:
   m_ObjectHideFlags: 0
