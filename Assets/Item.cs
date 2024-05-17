@@ -50,10 +50,9 @@ public abstract class Item : Items
 
     public void Purchase(bool buyCondition)
     {
-        if (buyCondition)
+        if (buyCondition && Inventory.instance.myItems.Count < 5)
         {
             Store.instance.remainingItems.Remove(this.gameObject);
-            print(Store.instance.remainingItems.Count);
             Store.instance.activeItems.Remove(this.gameObject);
 
             Inventory.instance.GotNewItem(gameObject);
@@ -66,7 +65,8 @@ public abstract class Item : Items
         }
         else
         {
-            StartCoroutine(Store.instance.NotifyText("NOT ENOUGH"));
+            if(Inventory.instance.myItems.Count < 5) StartCoroutine(Store.instance.NotifyText("NO CASH"));
+            else StartCoroutine(Store.instance.NotifyText("NO SPACE"));
         }
 
 

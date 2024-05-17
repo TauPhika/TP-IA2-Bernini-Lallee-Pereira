@@ -160,33 +160,46 @@ public class Store : MonoBehaviour
         string typeText = option.text.ToUpper();
         Redistribute(activeItems);
 
-        var filteredItems = activeItems.
-                            /*del tipo deseado*/ Where(x => typeText.Contains(x.GetComponent<Item>().itemType.ToString())).
-                            /*en orden casi alfabetico*/ OrderBy(x => x.name.First()).
-                            ThenBy(x => x.name.Skip(1).FirstOrDefault()).
-                            ToList();
+        var armorItems = activeItems.Select(x => x.GetComponent<Item>()).OfType<ItemArmor>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
+        var potionItems = activeItems.Select(x => x.GetComponent<Item>()).OfType<ItemPotion>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
+        var weaponItems = activeItems.Select(x => x.GetComponent<Item>()).OfType<ItemWeapon>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
+
+        List<GameObject> fItems = new();
+
+        if(typeText.Contains("ARMOR"))
+        {
+            fItems = armorItems.Select(x => x.gameObject).ToList();
+        }
+        else if (typeText.Contains("POTION"))
+        {
+            fItems = potionItems.Select(x => x.gameObject).ToList();
+        }
+        else if (typeText.Contains("POTION"))
+        {
+            fItems = weaponItems.Select(x => x.gameObject).ToList();
+        }
 
         if (typeText == "ALL")
         {
-            filteredItems = filteredByText.ToList();
+            fItems = filteredByText.ToList();
         }
 
 
         if (_plusTextFilter) 
-        filteredItems = filteredItems.
-                        Aggregate(/*valor por defecto*/ new List<GameObject>(), /*total acumulado, nodo actual*/ (acum, current) =>
-                        {
-                            // Si el nodo actual tambien esta filtrado por el texto lo conservamos en la lista. Es un Where casero.
-                            if (filteredByText.Contains(current))
-                            {
-                                acum.Add(current);
-                            }
+        fItems = fItems.
+                Aggregate(/*valor por defecto*/ new List<GameObject>(), /*total acumulado, nodo actual*/ (acum, current) =>
+                {
+                    // Si el nodo actual tambien esta filtrado por el texto lo conservamos en la lista.
+                    if (filteredByText.Contains(current))
+                    {
+                        acum.Add(current);
+                    }
 
-                            return acum;
-                        });
+                    return acum;
+                });
        
-        Redistribute(filteredItems);
-        return filteredItems;
+        Redistribute(fItems);
+        return fItems;
 
     }
 

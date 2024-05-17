@@ -15,22 +15,30 @@ public class Inventory : MonoBehaviour
     public GameObject inventoryMenu;
     public GameObject storeMenu;
 
+    public TextMeshProUGUI moneyDisplay;
+    public TextMeshProUGUI dollarsDisplay;
+
     List<GameObject> inventoryDisplay = new();
 
     private void Awake()
     {
         instance = this;
+
+        inventoryDisplay.Add(moneyDisplay.gameObject);
+        inventoryDisplay.Add(dollarsDisplay.gameObject);
     }
 
     private void Start()
     {
-        TurnInventoryMenu();
+        inventoryMenu.SetActive(false);
     }
 
-    public IEnumerable<GameObject> GotNewItem(GameObject newItem)
+    public void GotNewItem(GameObject newItem = default)
     {
-        var newCol = inventoryDisplay.TakeWhile(x => x.GetComponent<TextMeshProUGUI>());
-
+        List<GameObject> keepCol = inventoryDisplay.TakeWhile(x => x.GetComponent<TextMeshProUGUI>()).ToList();
+        print($"Textos = {keepCol.Count()}.");
+        inventoryDisplay.Remove(newItem);
+        
         foreach (var item in inventoryDisplay)
         {
             Destroy(item);
@@ -39,16 +47,18 @@ public class Inventory : MonoBehaviour
 
         Destroy(newItem.GetComponentInChildren<Button>().gameObject);
         myItems.Add(newItem);
+        print($"Items = {myItems.Count()}.");
 
-        inventoryDisplay = newCol.Concat(myItems).ToList();
+        List<GameObject> newCol = keepCol.Concat(myItems).ToList();
 
-        foreach (var item in newCol.Concat(myItems))
+        print($"Textos + items = {newCol.Count()}.");
+
+        foreach (var item in newCol)
         {
+            
             var i = Instantiate(item, inventoryPanel);
             inventoryDisplay.Add(i);
         }
-
-        return inventoryDisplay;
     }
 
     public void TurnInventoryMenu()

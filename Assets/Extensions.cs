@@ -42,14 +42,52 @@ public static class Extensions
     
     public static IEnumerable<GameObject> ByType(this IEnumerable<GameObject> col, bool firstToLast = true)
     {
-        if (firstToLast) return col.OrderBy(x => x.GetComponent<Item>().itemType);
-        else return col.OrderByDescending(x => x.GetComponent<Item>().itemType);
+        IEnumerable<GameObject> newCol;
+
+        if (firstToLast) 
+        {
+            var armorItems = col.Select(x => x.GetComponent<Item>()).OfType<ItemArmor>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
+            var potionItems = col.Select(x => x.GetComponent<Item>()).OfType<ItemPotion>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
+            var weaponItems = col.Select(x => x.GetComponent<Item>()).OfType<ItemWeapon>().OrderBy(x => x.name.First()).ThenBy(x => x.name.Skip(1).FirstOrDefault());
+
+            newCol = armorItems.Select(x => x.gameObject).
+                                Concat(potionItems.Select(x => x.gameObject)).
+                                Concat(weaponItems.Select(x => x.gameObject));
+        }
+        else
+        {
+            var armorItems = col.Select(x => x.GetComponent<Item>()).OfType<ItemArmor>().OrderByDescending(x => x.name.First()).ThenByDescending(x => x.name.Skip(1).FirstOrDefault());
+            var potionItems = col.Select(x => x.GetComponent<Item>()).OfType<ItemPotion>().OrderByDescending(x => x.name.First()).ThenByDescending(x => x.name.Skip(1).FirstOrDefault());
+            var weaponItems = col.Select(x => x.GetComponent<Item>()).OfType<ItemWeapon>().OrderByDescending(x => x.name.First()).ThenByDescending(x => x.name.Skip(1).FirstOrDefault());
+
+            newCol = weaponItems.Select(x => x.gameObject).
+                                Concat(potionItems.Select(x => x.gameObject)).
+                                Concat(armorItems.Select(x => x.gameObject));
+        }
+
+        return newCol;
     }
 
     public static IEnumerable<GameObject> ByPrice(this IEnumerable<GameObject> col, bool cheapToExpensive = true)
     {
-        if(cheapToExpensive) return col.OrderBy(x => x.GetComponent<Item>().price);
-        else return col.OrderByDescending(x => x.GetComponent<Item>().price);
+        IEnumerable<GameObject> newCol;
+        
+        if (cheapToExpensive) 
+        { 
+            var regularCol = col.Where(x => !x.GetComponent<Item>().isPremium).OrderBy(x => x.GetComponent<Item>().price);
+            var premiumCol = col.Where(x => x.GetComponent<Item>().isPremium).OrderBy(x => x.GetComponent<Item>().price);
+
+            newCol = regularCol.Concat(premiumCol);
+        }
+        else
+        {
+            var regularCol = col.Where(x => !x.GetComponent<Item>().isPremium).OrderByDescending(x => x.GetComponent<Item>().price);
+            var premiumCol = col.Where(x => x.GetComponent<Item>().isPremium).OrderByDescending(x => x.GetComponent<Item>().price);
+
+            newCol = premiumCol.Concat(regularCol);
+        }
+
+        return newCol;
     }
 
 }
