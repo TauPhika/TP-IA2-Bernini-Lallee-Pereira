@@ -36,37 +36,90 @@ public class Inventory : MonoBehaviour
         inventoryMenu.SetActive(false);
     }
 
+    #region GotNewItem 1
+    //public void GotNewItem(GameObject newItem = default)
+    //{
+    //    if (inventoryDisplay.DefaultIfEmpty() == default) print("Algo salio mal.");
+
+    //    newItem.GetComponent<Image>().sprite = newItem.GetComponent<Item>().sprite;
+    //    Destroy(newItem.GetComponentInChildren<Button>().gameObject);
+
+    //    inventoryDisplay.Add(Instantiate(newItem, inventoryPanel));
+
+    //    List<GameObject> keepCol = inventoryDisplay.
+    //                               TakeWhile(x => x.GetComponent<TextMeshProUGUI>()).
+    //                               SetAllActive(true).
+    //                               ToList();
+
+
+
+    //    print($"Textos = {keepCol.Count()}.");
+    //    inventoryDisplay.Remove(newItem);
+
+    //    foreach (var item in inventoryDisplay)
+    //    {
+    //        Destroy(item.gameObject);
+    //    }
+
+    //    myItems.Add(newItem);
+    //    print($"Items = {myItems.Count()}.");
+
+    //    LinkedList<GameObject> newCol = keepCol.Concat(myItems.ByType()).ToLinkedList();
+
+    //    print($"Textos + items = {newCol.Count()}.");
+
+    //    foreach (var item in newCol)
+    //    {            
+    //        var i = Instantiate(item, inventoryPanel);
+    //        inventoryDisplay.Add(i);
+    //    }
+
+    //    newCol.Clear();
+    //}
+    #endregion
+
+    #region GotNewItem 2
     public void GotNewItem(GameObject newItem = default)
     {
+        if (inventoryDisplay.DefaultIfEmpty() == default) print("Algo salio mal.");
+
+        newItem.GetComponent<Image>().sprite = newItem.GetComponent<Item>().sprite;
+        Destroy(newItem.GetComponentInChildren<Button>().gameObject);
+
+        //inventoryDisplay.Add(Instantiate(newItem, inventoryPanel));
+
         List<GameObject> keepCol = inventoryDisplay.
                                    TakeWhile(x => x.GetComponent<TextMeshProUGUI>()).
                                    SetAllActive(true).
                                    ToList();
 
+
+
         print($"Textos = {keepCol.Count()}.");
-        //{ if (!x.activeInHierarchy) x.SetActive(true); return x; }
         inventoryDisplay.Remove(newItem);
-        
+
         foreach (var item in inventoryDisplay)
         {
             Destroy(item.gameObject);
         }
         inventoryDisplay.Clear();
 
-        Destroy(newItem.GetComponentInChildren<Button>().gameObject);
         myItems.Add(newItem);
         print($"Items = {myItems.Count()}.");
 
-        List<GameObject> newCol = keepCol.Concat(myItems).ToList();
+        LinkedList<GameObject> newCol = keepCol.Concat(myItems).ToLinkedList();
 
         print($"Textos + items = {newCol.Count()}.");
 
         foreach (var item in newCol)
-        {            
-            var i = Instantiate(item.gameObject, inventoryPanel);
+        {
+            var i = Instantiate(item, inventoryPanel);
             inventoryDisplay.Add(i);
         }
+
+        newCol.Clear();
     }
+    #endregion
 
     public void TurnInventoryMenu()
     {

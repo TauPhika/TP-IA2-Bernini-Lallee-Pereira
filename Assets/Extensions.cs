@@ -38,6 +38,18 @@ public static class Extensions
         });
     }
 
+    public static LinkedList<GameObject> ToLinkedList(this IEnumerable<GameObject> col)
+    {
+        LinkedList<GameObject> newCol = new();
+
+        foreach (var item in col)
+        {
+            newCol.AddLast(item);
+        }
+
+        return newCol;
+    }
+
     // Ordena los items por su coincidencia con el texto escrito cuando ContextSensitive esta activado.
     public static IEnumerable<GameObject> OrderByTextMatch(this IEnumerable<Item> col, string inputText)
     {

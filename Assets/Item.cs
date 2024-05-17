@@ -51,7 +51,7 @@ public abstract class Item : MonoBehaviour
 
     public void Purchase(bool buyCondition)
     {
-        if (buyCondition && Inventory.instance.myItems.Count < 5)
+        if (buyCondition && Inventory.instance.myItems.Count < 6)
         {
             Store.instance.remainingItems.Remove(this.gameObject);
             Store.instance.activeItems.Remove(this.gameObject);
@@ -94,8 +94,11 @@ public abstract class Item : MonoBehaviour
         {
             if (!contextSensitive)
             {
-                if (itemName.Skip(inputText.IndexOf(c)).First() == c) matching.Add(true); 
-                else matching.Add(false);
+                if (itemName.Skip(inputText.IndexOf(c)).FirstOrDefault() != default)
+                {
+                    if (itemName.Skip(inputText.IndexOf(c)).First() == c) matching.Add(true);
+                    else matching.Add(false);
+                } 
 
                 //print(matching[inputText.IndexOf(c)]);
             }
