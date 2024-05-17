@@ -54,10 +54,10 @@ public abstract class Item : Items
         {
             Store.instance.remainingItems.Remove(this.gameObject);
             Store.instance.activeItems.Remove(this.gameObject);
-
-            Inventory.instance.GotNewItem(gameObject);
             
             Store.instance.Redistribute(Store.instance.activeItems);
+
+            Inventory.instance.GotNewItem(gameObject);
 
             Store.instance.StartCoroutine(Store.instance.NotifyText("PURCHASED"));
             Destroy(gameObject);

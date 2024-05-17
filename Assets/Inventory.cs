@@ -37,11 +37,12 @@ public class Inventory : MonoBehaviour
     {
         List<GameObject> keepCol = inventoryDisplay.TakeWhile(x => x.GetComponent<TextMeshProUGUI>()).ToList();
         print($"Textos = {keepCol.Count()}.");
+        //{ if (!x.activeInHierarchy) x.SetActive(true); return x; }
         inventoryDisplay.Remove(newItem);
         
         foreach (var item in inventoryDisplay)
         {
-            Destroy(item);
+            Destroy(item.gameObject);
         }
         inventoryDisplay.Clear();
 
@@ -54,9 +55,8 @@ public class Inventory : MonoBehaviour
         print($"Textos + items = {newCol.Count()}.");
 
         foreach (var item in newCol)
-        {
-            
-            var i = Instantiate(item, inventoryPanel);
+        {            
+            var i = Instantiate(item.gameObject, inventoryPanel);
             inventoryDisplay.Add(i);
         }
     }
