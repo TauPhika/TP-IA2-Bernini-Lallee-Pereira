@@ -22,6 +22,8 @@ public abstract class Item : Items
     TextMeshProUGUI _buttonText;
     TextMeshProUGUI _nameText;
 
+    public bool isPremium; 
+
     private void Awake()
     {
         GetComponent<Image>().sprite = sprite;
@@ -31,30 +33,47 @@ public abstract class Item : Items
 
         _button = GetComponentInChildren<Button>();
         _buttonText = _button.GetComponentInChildren<TextMeshProUGUI>();
-        _buttonText.text = $"Buy ({price})";
+        if (!isPremium) _buttonText.text = $"Buy ({price})";
+        else
+        { 
+            _buttonText.text = $"Pay ${price}";
+            _buttonText.color = new Color(0,0.8f,0);
+        }
     }
 
 
     // Obtiene este item desde la lista de la tienda y provoca su redistribucion.
     public void Buy()
     {
-        if (Wallet.money >= price)
+        if (!isPremium) Purchase(Wallet.money >= price); else Purchase(Wallet.dollars >= price);
+    }
+
+    public void Purchase(bool buyCondition)
+    {
+        if (buyCondition)
         {
             Store.instance.remainingItems.Remove(this.gameObject);
             print(Store.instance.remainingItems.Count);
             Store.instance.activeItems.Remove(this.gameObject);
 
+            Inventory.instance.GotNewItem(gameObject);
+            
             Store.instance.Redistribute(Store.instance.activeItems);
 
             Store.instance.StartCoroutine(Store.instance.NotifyText("PURCHASED"));
             Destroy(gameObject);
             Wallet.money -= price;
         }
-        else 
+        else
         {
             StartCoroutine(Store.instance.NotifyText("NOT ENOUGH"));
-        } 
+        }
+
+
+        Store.instance.moneyText.text = $"Coins: {Wallet.money}";
+        Store.instance.dollarsText.text = $"Dollars: ${Wallet.dollars}";
     }
+
 
     public void ShowInfo()
     {

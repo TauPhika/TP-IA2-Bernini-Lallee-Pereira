@@ -24,6 +24,7 @@ public class Store : MonoBehaviour
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI notifyText;
     public TextMeshProUGUI infoText;
+    public TextMeshProUGUI dollarsText;
     public float notificationTime;
 
     [Header("SIZE ADJUST")]
@@ -56,6 +57,9 @@ public class Store : MonoBehaviour
         //SaveItemID(initialItems);
         _storeFilters.UpdateFiltering();
         infoText.text = "Welcome! Right click any item to learn about them.";
+        moneyText.text = $"Coins: {Wallet.money}";
+        dollarsText.text = $"Dollars: ${Wallet.dollars}";
+
     }
 
     #region DESCRIPTION

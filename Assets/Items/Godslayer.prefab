@@ -391,12 +391,13 @@ MonoBehaviour:
   itemType: 2
   sprite: {fileID: 21300000, guid: c824dd3c3142b6f4a9821eac3b47826a, type: 3}
   itemName: GODSLAYER
-  itemInfo: Damage = 999. -  Durability = 30. -  A weapon so mighty it might crash
+  itemInfo: Damage = 999.  |  Durability = 30.  |  A weapon so mighty it might crash
     your game.
-  price: 100
+  price: 5
   firstInfo: 999
   secondInfo: 30
   description: A weapon so mighty it might crash your game.
+  isPremium: 1
 --- !u!65 &-1591793790624085513
 BoxCollider:
   m_ObjectHideFlags: 0

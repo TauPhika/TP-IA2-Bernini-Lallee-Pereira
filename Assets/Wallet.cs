@@ -7,4 +7,6 @@ public static class Wallet
 
     public static int money = 50;
 
+    public static int dollars = 1;
+
 }
